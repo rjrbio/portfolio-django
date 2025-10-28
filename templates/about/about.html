@@ -31,19 +31,32 @@
         
         {% if technologies %}
         <div style="margin-top: 4rem;">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Tecnologías</h2>
-            <div class="grid grid-3">
-                {% for tech in technologies %}
-                <div class="card" style="text-align: center;">
-                    <h3>{{ tech.name }}</h3>
-                    <p style="color: var(--text-secondary);">{{ tech.category }}</p>
-                    <div style="margin-top: 1rem; background: var(--bg-secondary); height: 10px; border-radius: var(--radius); overflow: hidden;">
-                        <div style="width: {{ tech.proficiency }}%; height: 100%; background: var(--primary);"></div>
+            <h2 style="text-align: center; margin-bottom: 3rem;">Tecnologías y Herramientas</h2>
+            
+            {% regroup technologies by get_category_display as category_list %}
+            {% for category in category_list %}
+            <div style="margin-bottom: 3rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">
+                    {{ category.grouper }}
+                </h3>
+                <div class="grid grid-4" style="gap: 2rem;">
+                    {% for tech in category.list %}
+                    <div class="card" style="text-align: center; padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        {% if tech.icon_class %}
+                        <i class="{{ tech.icon_class }}" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                        {% else %}
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
+                        {% endif %}
+                        <h4 style="margin-bottom: 0.75rem; font-size: 1.125rem;">{{ tech.name }}</h4>
+                        <div style="background: var(--bg-secondary); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 0.5rem;">
+                            <div style="width: {{ tech.proficiency }}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.5s ease;"></div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">{{ tech.proficiency }}%</p>
                     </div>
-                    <p style="margin-top: 0.5rem; font-size: 0.875rem;">{{ tech.proficiency }}%</p>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
         {% endif %}
     </div>
