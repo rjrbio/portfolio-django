@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre Mí{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 3rem;">Sobre Mí</h1>
+        {% if about %}
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="card">
+                {% if about.profile_image %}
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <img src="{{ about.profile_image.url }}" alt="{{ about.name }}" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary);">
+                </div>
+                {% endif %}
+                <h2 style="text-align: center;">{{ about.name }}</h2>
+                <h3 style="color: var(--primary); margin-bottom: 2rem; text-align: center;">{{ about.title }}</h3>
+                <p style="font-size: 1.125rem; line-height: 1.8; margin-bottom: 2rem;">{{ about.bio }}</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                    {% if about.email %}<a href="mailto:{{ about.email }}" class="btn">Email</a>{% endif %}
+                    {% if about.github %}<a href="{{ about.github }}" class="btn btn-outline" target="_blank">GitHub</a>{% endif %}
+                    {% if about.linkedin %}<a href="{{ about.linkedin }}" class="btn btn-outline" target="_blank">LinkedIn</a>{% endif %}
+                    {% if about.cv_file %}<a href="{{ about.cv_file.url }}" class="btn btn-secondary" download>Descargar CV</a>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p style="text-align: center;">Información no disponible.</p>
+        {% endif %}
+        
+        {% if technologies %}
+        <div style="margin-top: 4rem;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Tecnologías</h2>
+            <div class="grid grid-3">
+                {% for tech in technologies %}
+                <div class="card" style="text-align: center;">
+                    <h3>{{ tech.name }}</h3>
+                    <p style="color: var(--text-secondary);">{{ tech.category }}</p>
+                    <div style="margin-top: 1rem; background: var(--bg-secondary); height: 10px; border-radius: var(--radius); overflow: hidden;">
+                        <div style="width: {{ tech.proficiency }}%; height: 100%; background: var(--primary);"></div>
+                    </div>
+                    <p style="margin-top: 0.5rem; font-size: 0.875rem;">{{ tech.proficiency }}%</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

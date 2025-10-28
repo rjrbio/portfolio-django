@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio_web
+    command: sh -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 portfolio.wsgi:application"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    expose:
+      - "8000"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: portfolio_nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - web
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:15
+    container_name: portfolio_db
+    restart: always
+    environment:
+      POSTGRES_DB: portfolio_db
+      POSTGRES_USER: portfolio_user
+      POSTGRES_PASSWORD: portfolio_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

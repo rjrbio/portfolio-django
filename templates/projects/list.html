@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Proyectos{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 3rem;">Mis Proyectos</h1>
+        {% if projects %}
+        <div class="grid grid-2">
+            {% for project in projects %}
+            <div class="card project-card">
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.description|truncatewords:30 }}</p>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    {% for tech in project.get_technologies_list %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    {% if project.github_url %}<a href="{{ project.github_url }}" class="btn btn-outline" target="_blank">GitHub</a>{% endif %}
+                    {% if project.url %}<a href="{{ project.url }}" class="btn" target="_blank">Ver Proyecto</a>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align: center; color: var(--text-secondary);">No hay proyectos disponibles aún.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

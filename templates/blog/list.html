@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 3rem;">Blog</h1>
+        {% if posts %}
+        <div class="grid grid-3">
+            {% for post in posts %}
+            <div class="card">
+                <h3><a href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></h3>
+                <p style="color: var(--text-secondary);">{{ post.excerpt }}</p>
+                <div style="margin-top: 1rem; color: var(--text-light); font-size: 0.875rem;">
+                    {{ post.created_at|date:"d M, Y" }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align: center; color: var(--text-secondary);">No hay publicaciones disponibles aún.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

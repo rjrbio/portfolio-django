@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Inicio - Portfolio{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Hola, soy Pepe</h1>
+        <p>Creando experiencias digitales increíbles con código limpio y diseño moderno</p>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <a href="{% url 'projects:list' %}" class="btn">Ver Proyectos</a>
+            <a href="{% url 'contact:contact' %}" class="btn btn-outline">Contactar</a>
+        </div>
+    </div>
+</section>
+
+{% if services %}
+<section style="background: var(--bg-secondary);">
+    <div class="container">
+        <h2>Servicios</h2>
+        <div class="grid grid-3">
+            {% for service in services %}
+            <div class="card">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">💻</div>
+                <h3>{{ service.title }}</h3>
+                <p style="color: var(--text-secondary);">{{ service.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if featured_projects %}
+<section>
+    <div class="container">
+        <h2>Proyectos Destacados</h2>
+        <div class="grid grid-2">
+            {% for project in featured_projects %}
+            <div class="card project-card">
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.description|truncatewords:20 }}</p>
+                {% if project.github_url or project.url %}
+                <div style="margin-top: 1rem;">
+                    {% if project.github_url %}<a href="{{ project.github_url }}" class="btn btn-outline" target="_blank">GitHub</a>{% endif %}
+                    {% if project.url %}<a href="{{ project.url }}" class="btn" target="_blank">Ver Proyecto</a>{% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{% url 'projects:list' %}" class="btn btn-secondary">Ver Todos los Proyectos</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center;">
+    <div class="container">
+        <h2 style="color: white;">¿Tienes un proyecto en mente?</h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem;">Hablemos y hagamos realidad tu idea</p>
+        <a href="{% url 'contact:contact' %}" class="btn" style="background: white; color: var(--primary);">Contactar Ahora</a>
+    </div>
+</section>
+{% endblock %}

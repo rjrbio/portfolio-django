@@ -1,0 +1,12 @@
+<nav>
+    <div class="container">
+        <a href="{% url 'home' %}" class="logo">Portfolio</a>
+        <ul>
+            <li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'about:about' %}">Sobre Mí</a></li>
+            <li><a href="{% url 'projects:list' %}">Proyectos</a></li>
+            <li><a href="{% url 'blog:list' %}">Blog</a></li>
+            <li><a href="{% url 'contact:contact' %}">Contacto</a></li>
+        </ul>
+    </div>
+</nav>

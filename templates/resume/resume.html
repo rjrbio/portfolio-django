@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Currículum{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container" style="max-width: 900px;">
+        <h1 style="text-align: center; margin-bottom: 3rem;">Currículum</h1>
+        
+        {% if education %}
+        <div style="margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem;">Educación</h2>
+            {% for edu in education %}
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <h3>{{ edu.degree }}</h3>
+                <div style="color: var(--primary); margin-bottom: 0.5rem;">{{ edu.institution }}</div>
+                <div style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    {{ edu.start_date|date:"Y" }} - {% if edu.current %}Presente{% else %}{{ edu.end_date|date:"Y" }}{% endif %}
+                </div>
+                {% if edu.description %}<p>{{ edu.description }}</p>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if experience %}
+        <div>
+            <h2 style="margin-bottom: 2rem;">Experiencia</h2>
+            {% for exp in experience %}
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <h3>{{ exp.position }}</h3>
+                <div style="color: var(--primary); margin-bottom: 0.5rem;">{{ exp.company }}</div>
+                <div style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    {{ exp.start_date|date:"M Y" }} - {% if exp.current %}Presente{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}
+                </div>
+                <p>{{ exp.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if not education and not experience %}
+        <p style="text-align: center; color: var(--text-secondary);">No hay información disponible.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container" style="max-width: 800px;">
+        <article class="card">
+            <h1>{{ post.title }}</h1>
+            <div style="color: var(--text-secondary); margin-bottom: 2rem;">
+                {{ post.created_at|date:"d de F, Y" }}
+            </div>
+            <div style="line-height: 1.8; font-size: 1.125rem;">
+                {{ post.content|linebreaks }}
+            </div>
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--bg-secondary);">
+                <a href="{% url 'blog:list' %}" class="btn btn-outline">← Volver al Blog</a>
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}
