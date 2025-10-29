@@ -27,8 +27,11 @@ COPY . /app/
 # Crear directorios necesarios
 RUN mkdir -p staticfiles media
 
+# Dar permisos de ejecución al entrypoint
+RUN chmod +x docker-entrypoint.sh
+
 # Exponer el puerto
 EXPOSE 8000
 
-# Comando por defecto con logging mejorado
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info", "portfolio.wsgi:application"]
+# Usar el script de entrada
+ENTRYPOINT ["./docker-entrypoint.sh"]
