@@ -13,9 +13,9 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: False
+        value: "False"
       - key: ALLOWED_HOSTS
-        value: .onrender.com
+        value: ".onrender.com"
 
 databases:
   - name: portfolio-db
