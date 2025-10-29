@@ -91,13 +91,27 @@ TEMPLATES = [
 WSGI_APPLICATION = "portfolio.wsgi.application"
 
 
-# Database - Usar DATABASE_URL de Render o local
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "postgresql://portfolio_user:portfolio_password@db:5432/portfolio_db"),
-        conn_max_age=600
-    )
-}
+# Database - Usar DATABASE_URL de Render o configuración local
+if os.getenv("DATABASE_URL"):
+    # Configuración para Render (producción)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),
+            conn_max_age=600
+        )
+    }
+else:
+    # Configuración para Docker local (desarrollo)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "portfolio_db",
+            "USER": "portfolio_user",
+            "PASSWORD": "portfolio_password",
+            "HOST": "db",
+            "PORT": "5432",
+        }
+    }
 
 
 # Password validation

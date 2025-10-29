@@ -5,3 +5,6 @@ pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 python manage.py migrate
+
+# Crear superusuario automáticamente
+python manage.py ensure_superuser
