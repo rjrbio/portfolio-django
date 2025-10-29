@@ -24,4 +24,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Comando por defecto
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "portfolio.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "portfolio.wsgi:application"]
