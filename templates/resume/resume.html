@@ -1,47 +1,77 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Currículum{% endblock %}
+{% block title %}
+  Currículum
+{% endblock %}
 
 {% block content %}
-<section>
+  <section>
     <div class="container" style="max-width: 900px;">
-        <h1 style="text-align: center; margin-bottom: 3rem;">Currículum</h1>
-        
-        {% if education %}
+      <h1 style="text-align: center; margin-bottom: 3rem;">Currículum</h1>
+
+      {% if education %}
         <div style="margin-bottom: 3rem;">
-            <h2 style="margin-bottom: 2rem;">Educación</h2>
-            {% for edu in education %}
+          <h2 style="margin-bottom: 2rem;">Educación</h2>
+          {% for edu in education %}
             <div class="card" style="margin-bottom: 1.5rem;">
-                <h3>{{ edu.degree }}</h3>
-                <div style="color: var(--primary); margin-bottom: 0.5rem;">{{ edu.institution }}</div>
-                <div style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    {{ edu.start_date|date:"Y" }} - {% if edu.current %}Presente{% else %}{{ edu.end_date|date:"Y" }}{% endif %}
-                </div>
-                {% if edu.description %}<p>{{ edu.description }}</p>{% endif %}
+              <h3>{{ edu.degree }}</h3>
+              <div style="color: var(--primary); margin-bottom: 0.5rem;">{{ edu.institution }}</div>
+              <div style="color: var(--text-secondary); margin-bottom: 1rem;">
+                {{ edu.start_date|date:'Y' }} -{% if edu.current %}
+                  Presente
+                {% else %}
+                  {{ edu.end_date|date:'Y' }}
+                {% endif %}
+              </div>
+              {% if edu.description %}
+                <p>{{ edu.description }}</p>
+              {% endif %}
             </div>
-            {% endfor %}
+          {% endfor %}
         </div>
-        {% endif %}
-        
-        {% if experience %}
+      {% endif %}
+
+      {% if experience %}
         <div>
-            <h2 style="margin-bottom: 2rem;">Experiencia</h2>
-            {% for exp in experience %}
+          <h2 style="margin-bottom: 2rem;">Experiencia</h2>
+          {% for exp in experience %}
             <div class="card" style="margin-bottom: 1.5rem;">
-                <h3>{{ exp.position }}</h3>
-                <div style="color: var(--primary); margin-bottom: 0.5rem;">{{ exp.company }}</div>
-                <div style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    {{ exp.start_date|date:"M Y" }} - {% if exp.current %}Presente{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}
-                </div>
-                <p>{{ exp.description }}</p>
+              <h3>{{ exp.position }}</h3>
+              <div style="color: var(--primary); margin-bottom: 0.5rem;">{{ exp.company }}</div>
+              <div style="color: var(--text-secondary); margin-bottom: 1rem;">
+                {{ exp.start_date|date:'M Y' }} -{% if exp.current %}
+                  Presente
+                {% else %}
+                  {{ exp.end_date|date:'M Y' }}
+                {% endif %}
+              </div>
+              <p>{{ exp.description }}</p>
             </div>
-            {% endfor %}
+          {% endfor %}
         </div>
-        {% endif %}
-        
-        {% if not education and not experience %}
+      {% endif %}
+
+      {% if education or experience %}
+        <hr style="margin: 3rem 0;" />
+      {% endif %}
+
+      {% if about %}
+        <div class="card" style="text-align: center; margin-top: 3rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+            {% if about.email %}
+              <a href="mailto:{{ about.email }}" class="btn">Email</a>
+            {% endif %}
+            {% if about.cv_file %}
+              <a href="{{ about.cv_file.url }}" class="btn btn-secondary" download>Descargar CV</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if not education and not experience %}
         <p style="text-align: center; color: var(--text-secondary);">No hay información disponible.</p>
-        {% endif %}
+      {% endif %}
     </div>
-</section>
+  </section>
 {% endblock %}

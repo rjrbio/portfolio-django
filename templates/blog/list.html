@@ -10,6 +10,11 @@
         <div class="grid grid-3">
             {% for post in posts %}
             <div class="card">
+                {% if post.image %}
+                <div style="width: 100%; height: 200px; overflow: hidden; border-radius: 8px; margin-bottom: 1rem;">
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                {% endif %}
                 <h3><a href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></h3>
                 <p style="color: var(--text-secondary);">{{ post.excerpt }}</p>
                 <div style="margin-top: 1rem; color: var(--text-light); font-size: 0.875rem;">

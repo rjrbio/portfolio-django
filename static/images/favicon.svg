@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo circular con gradiente -->
+  <circle cx="50" cy="50" r="48" fill="url(#grad)" opacity="0.95"/>
+  
+  <!-- Símbolo de código estilizado <RJ/> -->
+  <g fill="#ffffff" font-family="'Courier New', monospace" font-weight="bold">
+    <!-- Bracket izquierdo -->
+    <path d="M 25 30 L 20 35 L 20 65 L 25 70" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- Letras RJ -->
+    <text x="50" y="60" font-size="28" text-anchor="middle" fill="#ffffff">RJ</text>
+    
+    <!-- Bracket derecho -->
+    <path d="M 75 30 L 80 35 L 80 65 L 75 70" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- Slash en el centro inferior -->
+    <line x1="45" y1="72" x2="55" y2="68" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

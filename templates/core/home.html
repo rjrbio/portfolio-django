@@ -7,11 +7,13 @@
 {% block content %}
 <section class="hero">
     <div class="container">
-        <h1>Hola, soy Pepe</h1>
-        <p>Creando experiencias digitales increíbles con código limpio y diseño moderno</p>
+        <img src="{% static 'images/favicon.svg' %}" alt="Pepe Logo" style="width: 100px; height: 100px; margin-bottom: 1rem;">
+        <h1>Web Developer</h1>
+        <h3>Jose Francisco Tinoco Fokkelman</h3>
+        <p>Haciendo realidad ideas digitales frescas con código limpio y diseño moderno</p>
         <div style="display: flex; gap: 1rem; margin-top: 2rem;">
             <a href="{% url 'projects:list' %}" class="btn">Ver Proyectos</a>
-            <a href="{% url 'contact:contact' %}" class="btn btn-outline">Contactar</a>
+            <a href="{% url 'about:about' %}" class="btn">Sobre Mí</a>
         </div>
     </div>
 </section>
@@ -65,4 +67,25 @@
         <a href="{% url 'contact:contact' %}" class="btn" style="background: white; color: var(--primary);">Contactar Ahora</a>
     </div>
 </section>
+
+{% if testimonials %}
+<section>
+    <div class="container">
+        <h2>Testimonios</h2>
+        <div class="grid grid-2">
+            {% for testimonial in testimonials %}
+            <div class="card">
+                <p>{{ testimonial.name }}</p>
+                <p>{{ testimonial.content }}</p>
+                <p style="font-weight: bold;">- {{ testimonial.author }}</p>
+                <p><small>{{ testimonial.created_at|date:"d M, Y" }}</small></p>
+                <p><small>{{ testimonial.position }}</small></p>
+                <p><small>{{ testimonial.company }}</small></p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% endblock %}
