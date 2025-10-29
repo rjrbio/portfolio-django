@@ -79,7 +79,7 @@ Y
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/f81ae6cb-42ff-48b3-843f-876b939376fd" />
 
-## Ejemplos de cómo funciona Django:
+## 🩺 Ejemplos de cómo funciona Django:
 1. Herencias de plantillas
    
     Base template
@@ -212,3 +212,10 @@ Y
     <!-- JavaScript -->
     <script src="{% static 'js/main.js' %}"></script>
    ```
+## 🔁 ACTUALIZACIÓN
+Por motivos académicos he modificado parámetros para poder hacer un deploy en Render, así como obtener una base de datos persistente (usando la del propio Render).
+<br>Por lo que ahora no podrá usarse de forma local -levantando contenedores con Docker- ya que la configuración para ello ya no está disponible. Sin embargo, dejo los archivos (ya obsoletos) de configuración de Docker para su inspección.
+<br>Archivos importantes para la correcta funcionalidad de Render: 
+    ```
+    render.yaml
+    

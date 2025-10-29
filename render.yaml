@@ -22,7 +22,7 @@ services:
       - key: DJANGO_SUPERUSER_EMAIL
         value: "joseftf1991@gmail.com"
       - key: DJANGO_SUPERUSER_PASSWORD
-        value: "Killoloko00"
+        value: "ContraseñaStrong!123"
 
 databases:
   - name: portfolio-db
