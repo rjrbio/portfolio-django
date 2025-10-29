@@ -215,7 +215,13 @@ Y
 ## 🔁 ACTUALIZACIÓN
 Por motivos académicos he modificado parámetros para poder hacer un deploy en Render, así como obtener una base de datos persistente (usando la del propio Render).
 <br>Por lo que ahora no podrá usarse de forma local -levantando contenedores con Docker- ya que la configuración para ello ya no está disponible. Sin embargo, dejo los archivos (ya obsoletos) de configuración de Docker para su inspección.
-<br>Archivos importantes para la correcta funcionalidad de Render: 
-    ```
-    render.yaml
-    
+<br>Archivos importantes añadidos para la correcta funcionalidad de Render: 
+
+```bash
+render.yaml
+# Configuración de Render, levanta servicios y base de datos
+docker-entrypoint.sh
+# Script de inicio (migraciones, collectstatic, superusuario)
+.dockerignore
+# Optimización del build
+```
