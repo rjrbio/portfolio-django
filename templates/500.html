@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 500 - Portfolio</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 6rem;
+            margin: 0;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+        p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin: 20px 0;
+        }
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        a:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>500</h1>
+        <h2>Error del Servidor</h2>
+        <p>Lo sentimos, algo salió mal en nuestro servidor.</p>
+        <p>Estamos trabajando para solucionarlo.</p>
+        <a href="/">Volver al inicio</a>
+    </div>
+</body>
+</html>

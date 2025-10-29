@@ -4,6 +4,7 @@ FROM python:3.12-slim
 # Evitar que Python guarde archivos .pyc y use buffer
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONIOENCODING=UTF-8
 
 # Crear directorio de trabajo
 WORKDIR /app
@@ -26,11 +27,8 @@ COPY . /app/
 # Crear directorios necesarios
 RUN mkdir -p staticfiles media
 
-# Recopilar archivos estáticos
-RUN python manage.py collectstatic --noinput || true
-
 # Exponer el puerto
 EXPOSE 8000
 
-# Comando por defecto
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "portfolio.wsgi:application"]
+# Comando por defecto con logging mejorado
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info", "portfolio.wsgi:application"]
