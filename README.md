@@ -2,25 +2,23 @@
 
 Portfolio personal moderno con diseño dark theme, desarrollado con Django 5.2 y PostgreSQL.
 
-## 🚀 Características
+## ⚙️ Características
 
-- **9 Aplicaciones Django**: Core, Proyectos, Servicios, Tecnologías, Testimonios, Blog, Currículum, Contacto y Sobre Mí
-- **Diseño Moderno**: Dark theme con gradientes púrpura-rosa, glassmorphism y animaciones suaves
-- **28 Tecnologías**: Frontend, Backend, Bases de Datos y Herramientas con iconos DevIcon
+- **Aplicaciones Django**: Core, Proyectos, Servicios, Tecnologías, Testimonios, Blog, Currículum, Contacto y Sobre Mí
+- **Tecnologías**: Frontend, Backend, Bases de Datos y Herramientas
 - **Sistema de Blog**: Con imágenes destacadas y gestión de contenido
 - **Currículum Dinámico**: Educación y experiencia laboral
 - **Gestión de Proyectos**: Portafolio de trabajos con imágenes y enlaces
-- **Contacto**: Formulario funcional con validación
 - **Admin Django**: Panel completo para gestionar todo el contenido
 - **Dockerizado**: Deployment con Docker Compose (Django + PostgreSQL + Nginx)
 
 ## 🛠️ Stack Tecnológico
 
-- **Backend**: Django 5.2.7, Python 3.12
-- **Base de Datos**: PostgreSQL 15
-- **Frontend**: HTML5, CSS3 (animaciones custom), DevIcon CDN
+- **Backend**: Django 5.2, Python 3.12
+- **Base de Datos**: PostgreSQL
+- **Frontend**: HTML5, CSS3, DevIcon CDN
 - **Servidor**: Gunicorn + Nginx
-- **Containerización**: Docker & Docker Compose
+- **Containerización**: Docker
 - **Imágenes**: Pillow para procesamiento
 
 ## 📦 Instalación
@@ -33,6 +31,9 @@ cd portfolio-django
 # Levantar con Docker
 docker-compose up -d
 
+# Restaurar el backup (IMPORTANTE)
+docker-compose exec -T db psql -U portfolio_user portfolio_db < backup.sql
+
 # Crear superusuario
 docker-compose exec web python manage.py createsuperuser
 
@@ -43,7 +44,7 @@ docker-compose exec web python manage.py createsuperuser
 
 ## 🎨 Diseño
 
-- Paleta de colores: Púrpura (#a855f7) y Rosa (#ec4899)
+- Paleta de colores: Púrpura y Rosa 
 - Efectos: Hover animations, floating elements, gradients
 - Responsive design
 - Favicon personalizado con iniciales <RJ/>
@@ -51,3 +52,6 @@ docker-compose exec web python manage.py createsuperuser
 ## 📝 Licencia
 
 Proyecto personal de portfolio.
+
+## 🕵️ Presentación 
+
