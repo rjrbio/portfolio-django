@@ -13,7 +13,14 @@ python manage.py collectstatic --no-input --clear
 echo "👤 Creando superusuario..."
 python manage.py ensure_superuser || echo "⚠️ Superusuario ya existe o error"
 
-echo "🚀 Iniciando Gunicorn..."
+echo "📦 Cargando datos iniciales (si existen fixtures y es el primer deploy)..."
+if [ ! -f "/app/.data_loaded" ]; then
+    python manage.py load_initial_data && touch /app/.data_loaded || echo "⚠️ No hay fixtures para cargar"
+else
+    echo "⚠️ Datos ya cargados previamente, saltando..."
+fi
+
+echo "�🚀 Iniciando Gunicorn..."
 exec gunicorn --bind 0.0.0.0:8000 \
     --workers 2 \
     --timeout 120 \
