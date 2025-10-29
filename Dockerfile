@@ -21,11 +21,12 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto del proyecto
+# Copiar el resto del proyecto (incluyendo media/)
 COPY . /app/
 
-# Crear directorios necesarios
-RUN mkdir -p staticfiles media
+# Crear directorios necesarios y dar permisos
+RUN mkdir -p staticfiles media && \
+    chmod -R 755 media staticfiles
 
 # Dar permisos de ejecución al entrypoint
 RUN chmod +x docker-entrypoint.sh

@@ -22,7 +22,24 @@ from django.http import JsonResponse
 
 def health_check(request):
     """Simple health check endpoint para Render"""
-    return JsonResponse({'status': 'ok', 'service': 'portfolio'})
+    import os
+    media_files = []
+    media_root = settings.MEDIA_ROOT
+    
+    # Listar algunos archivos media para debug
+    if os.path.exists(media_root):
+        for root, dirs, files in os.walk(media_root):
+            for file in files[:5]:  # Solo los primeros 5
+                rel_path = os.path.relpath(os.path.join(root, file), media_root)
+                media_files.append(rel_path)
+    
+    return JsonResponse({
+        'status': 'ok',
+        'service': 'portfolio',
+        'media_root': str(media_root),
+        'media_exists': os.path.exists(media_root),
+        'sample_files': media_files
+    })
 
 urlpatterns = [
     path('health/', health_check, name='health_check'),
@@ -38,9 +55,9 @@ urlpatterns = [
     path('resume/', include('apps.resume.urls')),
 ]
 
-# Servir archivos media en desarrollo
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Servir archivos media (en desarrollo Y producción)
+# Django sirve los archivos directamente
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Handler para errores
 handler500 = 'portfolio.error_handlers.custom_500'
