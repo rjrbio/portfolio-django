@@ -15,10 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import JsonResponse
+from portfolio.media_debug import media_debug
+from portfolio.media_serve import serve_media
 
 def health_check(request):
     """Simple health check endpoint para Render"""
@@ -43,6 +45,7 @@ def health_check(request):
 
 urlpatterns = [
     path('health/', health_check, name='health_check'),
+    path('media-debug/', media_debug, name='media_debug'),
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
     path('projects/', include('apps.projects.urls')),
@@ -55,9 +58,9 @@ urlpatterns = [
     path('resume/', include('apps.resume.urls')),
 ]
 
-# Servir archivos media (en desarrollo Y producción)
-# Django sirve los archivos directamente
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Servir archivos media en PRODUCCIÓN con vista personalizada
+# Esto es necesario porque Gunicorn no sirve archivos automáticamente
+re_path(r'^media/(?P<path>.*)$', serve_media, name='media'),
 
 # Handler para errores
 handler500 = 'portfolio.error_handlers.custom_500'
