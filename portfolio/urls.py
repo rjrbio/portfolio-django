@@ -56,11 +56,10 @@ urlpatterns = [
     path('techs/', include('apps.techs.urls')),
     path('blog/', include('apps.blog.urls')),
     path('resume/', include('apps.resume.urls')),
+    # Servir archivos media en PRODUCCIÓN con vista personalizada
+    # Esto es necesario porque Gunicorn no sirve archivos automáticamente
+    re_path(r'^media/(?P<path>.*)$', serve_media, name='media'),
 ]
-
-# Servir archivos media en PRODUCCIÓN con vista personalizada
-# Esto es necesario porque Gunicorn no sirve archivos automáticamente
-re_path(r'^media/(?P<path>.*)$', serve_media, name='media'),
 
 # Handler para errores
 handler500 = 'portfolio.error_handlers.custom_500'
