@@ -15,11 +15,13 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
-# Cargar variables desde .env si existe
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Cargar variables desde .env si existe (ruta explícita)
+env_file = BASE_DIR / ".env"
+if env_file.exists():
+    load_dotenv(str(env_file))
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,6 +37,10 @@ def get_env_list(name, default=""):
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
+
+# Debug: mostrar si las variables se cargan
+import sys
+print(f"[SETTINGS] DEBUG={DEBUG}, DB_NAME={os.getenv('DB_NAME')}", file=sys.stderr)
 
 ALLOWED_HOSTS = get_env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 
