@@ -20,8 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Cargar variables desde .env si existe (ruta explícita)
 env_file = BASE_DIR / ".env"
+import sys
+print(f"[SETTINGS] BASE_DIR={BASE_DIR}", file=sys.stderr)
+print(f"[SETTINGS] env_file={env_file}", file=sys.stderr)
+print(f"[SETTINGS] env_file.exists()={env_file.exists()}", file=sys.stderr)
+
 if env_file.exists():
     load_dotenv(str(env_file))
+    print(f"[SETTINGS] .env cargado", file=sys.stderr)
+else:
+    print(f"[SETTINGS] .env NO ENCONTRADO", file=sys.stderr)
 
 
 # Quick-start development settings - unsuitable for production
