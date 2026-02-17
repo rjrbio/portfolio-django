@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
+from dotenv import load_dotenv
+
+# Cargar variables desde .env si existe
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -131,15 +135,6 @@ else:
     db_port = os.getenv("DB_PORT") or os.getenv("POSTGRES_PORT") or os.getenv("PGPORT")
     db_sslmode = os.getenv("DB_SSLMODE")
 
-    # DEBUG: Imprimir valores en logs para verificar
-    import sys
-    print(f"[DB DEBUG] DEBUG={DEBUG}", file=sys.stderr)
-    print(f"[DB DEBUG] DB_NAME={db_name}", file=sys.stderr)
-    print(f"[DB DEBUG] DB_USER={db_user}", file=sys.stderr)
-    print(f"[DB DEBUG] DB_HOST={db_host}", file=sys.stderr)
-    print(f"[DB DEBUG] DB_PORT={db_port}", file=sys.stderr)
-    print(f"[DB DEBUG] all()={all([db_name, db_user, db_password, db_host, db_port])}", file=sys.stderr)
-
     if all([db_name, db_user, db_password, db_host, db_port]):
         DATABASES = {
             "default": {
@@ -154,7 +149,6 @@ else:
         }
         if db_sslmode:
             DATABASES["default"]["OPTIONS"] = {"sslmode": db_sslmode}
-        print(f"[DB DEBUG] Usando CONFIGURACION DE ALWAYSDATA", file=sys.stderr)
     else:
         # Configuración para Docker local (desarrollo)
         DATABASES = {
@@ -167,7 +161,6 @@ else:
                 "PORT": "5432",
             }
         }
-        print(f"[DB DEBUG] Usando CONFIGURACION DOCKER LOCAL (default)", file=sys.stderr)
 
 
 # Password validation
