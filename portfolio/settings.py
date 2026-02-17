@@ -24,10 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-for-development")
 
+def get_env_list(name, default=""):
+    value = os.getenv(name, default)
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = get_env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 
 # Logging para ver errores en producción
 LOGGING = {
@@ -52,13 +57,10 @@ LOGGING = {
 }
 
 # CSRF trusted origins for production
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost',
-    'http://localhost:8080',
-    'http://127.0.0.1',
-    'http://127.0.0.1:8080',
-    'https://*.onrender.com',
-]
+CSRF_TRUSTED_ORIGINS = get_env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://localhost,http://localhost:8080,http://127.0.0.1,http://127.0.0.1:8080",
+)
 
 
 # Application definition
@@ -113,27 +115,48 @@ TEMPLATES = [
 WSGI_APPLICATION = "portfolio.wsgi.application"
 
 
-# Database - Usar DATABASE_URL de Render o configuración local
+# Database - Usar DATABASE_URL o variables individuales (AlwaysData/hosting)
 if os.getenv("DATABASE_URL"):
-    # Configuración para Render (producción)
     DATABASES = {
         "default": dj_database_url.config(
             default=os.getenv("DATABASE_URL"),
-            conn_max_age=600
+            conn_max_age=600,
         )
     }
 else:
-    # Configuración para Docker local (desarrollo)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "portfolio_db",
-            "USER": "portfolio_user",
-            "PASSWORD": "portfolio_password",
-            "HOST": "db",
-            "PORT": "5432",
+    db_name = os.getenv("DB_NAME") or os.getenv("POSTGRES_DB") or os.getenv("PGDATABASE")
+    db_user = os.getenv("DB_USER") or os.getenv("POSTGRES_USER") or os.getenv("PGUSER")
+    db_password = os.getenv("DB_PASSWORD") or os.getenv("POSTGRES_PASSWORD") or os.getenv("PGPASSWORD")
+    db_host = os.getenv("DB_HOST") or os.getenv("POSTGRES_HOST") or os.getenv("PGHOST")
+    db_port = os.getenv("DB_PORT") or os.getenv("POSTGRES_PORT") or os.getenv("PGPORT")
+    db_sslmode = os.getenv("DB_SSLMODE")
+
+    if all([db_name, db_user, db_password, db_host, db_port]):
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": db_name,
+                "USER": db_user,
+                "PASSWORD": db_password,
+                "HOST": db_host,
+                "PORT": db_port,
+                "CONN_MAX_AGE": 600,
+            }
         }
-    }
+        if db_sslmode:
+            DATABASES["default"]["OPTIONS"] = {"sslmode": db_sslmode}
+    else:
+        # Configuración para Docker local (desarrollo)
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": "portfolio_db",
+                "USER": "portfolio_user",
+                "PASSWORD": "portfolio_password",
+                "HOST": "db",
+                "PORT": "5432",
+            }
+        }
 
 
 # Password validation

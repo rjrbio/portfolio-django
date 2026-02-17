@@ -42,6 +42,39 @@ docker-compose exec web python manage.py createsuperuser
 # Admin: http://localhost:8080/admin
 ```
 
+## 🚀 Deploy en AlwaysData (PostgreSQL propio)
+
+1) En AlwaysData crea una base de datos PostgreSQL y toma los datos de conexion.
+2) En el panel de entorno de tu app define estas variables:
+
+```bash
+DEBUG=False
+SECRET_KEY=tu-clave-secreta
+ALLOWED_HOSTS=tu-dominio.alwaysdata.net
+CSRF_TRUSTED_ORIGINS=https://tu-dominio.alwaysdata.net
+
+DB_NAME=nombre_db
+DB_USER=usuario_db
+DB_PASSWORD=clave_db
+DB_HOST=host_db
+DB_PORT=5432
+DB_SSLMODE=prefer
+```
+
+3) En la configuracion WSGI de AlwaysData apunta a `portfolio/wsgi.py`.
+4) Ejecuta en el panel de comandos:
+
+```bash
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+```
+
+5) Crea un superusuario si lo necesitas:
+
+```bash
+python manage.py createsuperuser
+```
+
 ## 🎨 Diseño
 
 - Paleta de colores: Púrpura y Rosa 
