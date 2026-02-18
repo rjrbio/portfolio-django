@@ -21,62 +21,6 @@ Portfolio personal desarrollado con Django 5.2 y PostgreSQL.
 - **Containerización**: Docker
 - **Imágenes**: Pillow para procesamiento
 
-## 📦 Instalación
-
-```bash
-# Clonar repositorio
-git clone https://github.com/rjrbio/portfolio-django.git
-cd portfolio-django
-
-# Levantar con Docker
-docker-compose up -d
-
-# Restaurar el backup (IMPORTANTE)
-docker-compose exec -T db psql -U portfolio_user portfolio_db < backup.sql
-
-# Crear superusuario
-docker-compose exec web python manage.py createsuperuser
-
-# Acceder
-# Portfolio: http://localhost:8080
-# Admin: http://localhost:8080/admin
-```
-
-## 🚀 Deploy en AlwaysData
-
-Para un deploy completo en AlwaysData con su base de datos PostgreSQL propia, consulta [DEPLOY_ALWAYSDATA.md](DEPLOY_ALWAYSDATA.md).
-
-**Resumen rápido:**
-1. Crea la BD PostgreSQL en AlwaysData
-2. Clona el repositorio en `/home/usuario/www`
-3. Instala dependencias: `pip install -r requirements.txt`
-4. Crea `.env` con las credenciales de BD
-5. Ejecuta: `python manage.py migrate --noinput && python manage.py collectstatic --noinput`
-6. Configura WSGI → `portfolio/wsgi.py`
-7. Reinicia la app
-
-## 📋 Variables de Entorno
-
-El proyecto soporta dos formas de configuración:
-
-### Opción A: Archivo `.env` (Recomendado)
-```
-DEBUG=False
-SECRET_KEY=tu-clave-secreta
-DB_NAME=tu_bd
-DB_USER=usuario_bd
-DB_PASSWORD=contraseña_bd
-DB_HOST=host-postgresql.alwaysdata.net
-DB_PORT=5432
-ALLOWED_HOSTS=tu-dominio.alwaysdata.net
-CSRF_TRUSTED_ORIGINS=https://tu-dominio.alwaysdata.net
-```
-
-### Opción B: Environment variables (servidor web)
-Define las mismas variables en el panel de tu hosting.
-
-**Nota:** El `.env` está en `.gitignore` por seguridad y no se sube a GitHub.
-
 ## 🎨 Diseño
 
 - Paleta de colores: Púrpura y Rosa 
@@ -248,15 +192,5 @@ Y
     <script src="{% static 'js/main.js' %}"></script>
    ```
 ## 🔁 ACTUALIZACIÓN
-Por motivos académicos he modificado parámetros para poder hacer un deploy en Render, así como obtener una base de datos persistente (usando la del propio Render).
+Por motivos académicos he modificado parámetros para poder hacer un deploy en AlwaysData, así como obtener una base de datos persistente (usando la del propio AlwaysData).
 <br>Por lo que ahora no podrá usarse de forma local -levantando contenedores con Docker- ya que la configuración para ello ya no está disponible. Sin embargo, dejo los archivos (ya obsoletos) de configuración de Docker para su inspección.
-<br>Archivos importantes añadidos para la correcta funcionalidad de Render: 
-
-```bash
-render.yaml
-# Configuración de Render, levanta servicios y base de datos
-docker-entrypoint.sh
-# Script de inicio (migraciones, collectstatic, superusuario)
-.dockerignore
-# Optimización del build
-```
