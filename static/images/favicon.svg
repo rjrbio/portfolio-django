@@ -1,26 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Fondo papel viejo con textura -->
+  <rect width="200" height="200" fill="#f5e6d3"/>
   
-  <!-- Fondo circular con gradiente -->
-  <circle cx="50" cy="50" r="48" fill="url(#grad)" opacity="0.95"/>
+  <!-- Manchas de papel viejo (artesanal) -->
+  <ellipse cx="45" cy="30" rx="18" ry="12" fill="#e8d4b8" opacity="0.4"/>
+  <ellipse cx="160" cy="165" rx="25" ry="15" fill="#e8d4b8" opacity="0.3"/>
+  <circle cx="170" cy="40" r="8" fill="#d4c4a8" opacity="0.35"/>
   
-  <!-- Símbolo de código estilizado <RJ/> -->
-  <g fill="#ffffff" font-family="'Courier New', monospace" font-weight="bold">
-    <!-- Bracket izquierdo -->
-    <path d="M 25 30 L 20 35 L 20 65 L 25 70" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Borde irregular tipo sello postal -->
+  <rect x="5" y="5" width="190" height="190" fill="none" stroke="#3d3228" stroke-width="3"/>
+  <rect x="10" y="10" width="180" height="180" fill="none" stroke="#9b8b4f" stroke-width="1.5" stroke-dasharray="5,3"/>
+  
+  <!-- Chapa/badge principal estilo antiguo -->
+  <g>
+    <!-- Sombra de la chapa (irregular) -->
+    <rect x="22" y="70" width="156" height="62" fill="#a85f38" opacity="0.25" rx="6"/>
     
-    <!-- Letras RJ -->
-    <text x="50" y="60" font-size="28" text-anchor="middle" fill="#ffffff">RJ</text>
+    <!-- Chapa base (rotada para efecto artesanal) -->
+    <rect x="20" y="65" width="160" height="60" fill="#d4794a" stroke="#3d3228" stroke-width="2.5" rx="4" transform="rotate(-3 100 95)"/>
     
-    <!-- Bracket derecho -->
-    <path d="M 75 30 L 80 35 L 80 65 L 75 70" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Capa superior desgastada -->
+    <rect x="23" y="68" width="154" height="54" fill="#e89566" opacity="0.6" rx="3" transform="rotate(-3 100 95)"/>
     
-    <!-- Slash en el centro inferior -->
-    <line x1="45" y1="72" x2="55" y2="68" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <!-- Remaches en las esquinas -->
+    <circle cx="30" cy="75" r="3" fill="#5a4a3a" opacity="0.7"/>
+    <circle cx="170" cy="75" r="3" fill="#5a4a3a" opacity="0.7"/>
+    <circle cx="30" cy="115" r="3" fill="#5a4a3a" opacity="0.7"/>
+    <circle cx="170" cy="115" r="3" fill="#5a4a3a" opacity="0.7"/>
   </g>
+  
+  <!-- Texto "rjrbio" estilo máquina de escribir imperfecta -->
+  <text x="100" y="105" font-family="Courier New, monospace" font-size="40" font-weight="bold" fill="#3d3228" text-anchor="middle" letter-spacing="0" transform="rotate(-3 100 105)">rjrbio</text>
+  
+  <!-- Línea decorativa debajo -->
+  <path d="M 40 130 L 160 130" stroke="#9b8b4f" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.5"/>
+  
+  <!-- Sello vintage arriba -->
+  <g opacity="0.4">
+    <circle cx="100" cy="35" r="18" fill="none" stroke="#b85450" stroke-width="2" stroke-dasharray="2,1"/>
+    <text x="100" y="40" font-family="Courier New, monospace" font-size="9" fill="#b85450" text-anchor="middle" font-weight="bold">EST</text>
+    <text x="100" y="39" font-family="Courier New, monospace" font-size="6" fill="#b85450" text-anchor="middle">2026</text>
+  </g>
+  
+  <!-- Sección inferior: etiqueta retro -->
+  <g>
+    <!-- Rectángulo decorativo para "WEB DEVELOPER" -->
+    <rect x="35" y="145" width="130" height="28" fill="#9b8b4f" opacity="0.15" rx="2"/>
+    <path d="M 38 147 L 162 147" stroke="#9b8b4f" stroke-width="0.8" opacity="0.6"/>
+    <path d="M 38 171 L 162 171" stroke="#9b8b4f" stroke-width="0.8" opacity="0.6"/>
+    
+    <!-- Texto pequeño "WEB DEVELOPER" -->
+    <text x="100" y="162" font-family="Courier New, monospace" font-size="9" font-weight="bold" fill="#5a4a3a" text-anchor="middle" letter-spacing="2.5" opacity="0.75">PORTFOLIO</text>
+    
+    <!-- Pequeños detalles ornamentales laterales -->
+    <circle cx="42" cy="159" r="1.5" fill="#c9a96e" opacity="0.5"/>
+    <circle cx="158" cy="159" r="1.5" fill="#c9a96e" opacity="0.5"/>
+    <path d="M 45 159 L 52 159" stroke="#c9a96e" stroke-width="0.8" opacity="0.4"/>
+    <path d="M 148 159 L 155 159" stroke="#c9a96e" stroke-width="0.8" opacity="0.4"/>
+  </g>
+  
+  <!-- Rayas esquineras vintage -->
+  <path d="M 15 18 L 28 18 M 15 18 L 15 31" stroke="#c9a96e" stroke-width="2" opacity="0.6"/>
+  <path d="M 185 18 L 172 18 M 185 18 L 185 31" stroke="#c9a96e" stroke-width="2" opacity="0.6"/>
+  <path d="M 15 182 L 28 182 M 15 182 L 15 169" stroke="#c9a96e" stroke-width="2" opacity="0.6"/>
+  <path d="M 185 182 L 172 182 M 185 182 L 185 169" stroke="#c9a96e" stroke-width="2" opacity="0.6"/>
 </svg>
