@@ -10,13 +10,14 @@ class Project(models.Model):
     github_url = models.URLField(blank=True, null=True, verbose_name="URL de GitHub")
     technologies = models.CharField(max_length=500, verbose_name="Tecnologías usadas", help_text="Separadas por comas")
     featured = models.BooleanField(default=False, verbose_name="Destacado")
+    order = models.PositiveIntegerField(default=0, verbose_name="Orden", db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name = "Proyecto"
         verbose_name_plural = "Proyectos"
-        ordering = ['-created_at']
+        ordering = ['order', '-created_at']
     
     def save(self, *args, **kwargs):
         if not self.slug:

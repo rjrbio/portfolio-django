@@ -452,6 +452,10 @@ nav a:hover::before {
     gap: 2.5rem;
 }
 
+.grid-1 {
+    grid-template-columns: 1fr;
+}
+
 .grid-2 {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
