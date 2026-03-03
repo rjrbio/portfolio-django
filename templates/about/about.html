@@ -41,17 +41,13 @@
                 </h3>
                 <div class="grid grid-4" style="gap: 2rem;">
                     {% for tech in category.list %}
-                    <div class="card" style="text-align: center; padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                    <div class="card" style="text-align: center; padding: 1.25rem; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 190px; height: 100%; display: flex; flex-direction: column; justify-content: center;">
                         {% if tech.icon_class %}
-                        <i class="{{ tech.icon_class }}" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                        <i class="{{ tech.icon_class }}" style="font-size: 4rem; margin-bottom: 0.75rem;"></i>
                         {% else %}
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
+                        <div style="font-size: 3rem; margin-bottom: 0.75rem;">💻</div>
                         {% endif %}
-                        <h4 style="margin-bottom: 0.75rem; font-size: 1.125rem;">{{ tech.name }}</h4>
-                        <div style="background: var(--bg-secondary); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 0.5rem;">
-                            <div style="width: {{ tech.proficiency }}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.5s ease;"></div>
-                        </div>
-                        <p style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">{{ tech.proficiency }}%</p>
+                        <h4 style="margin-bottom: 0; font-size: 1.125rem;">{{ tech.name }}</h4>
                     </div>
                     {% endfor %}
                 </div>
