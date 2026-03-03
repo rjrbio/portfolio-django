@@ -1,17 +1,44 @@
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth import get_user_model
 import os
 
 class Command(BaseCommand):
-    help = 'Crea un superusuario si no existe'
+    help = 'Crea un superusuario si no existe. Requiere variables de entorno configuradas.'
 
     def handle(self, *args, **options):
         User = get_user_model()
         
-        username = os.getenv('DJANGO_SUPERUSER_USERNAME', 'admin')
-        email = os.getenv('DJANGO_SUPERUSER_EMAIL', 'admin@example.com')
-        password = os.getenv('DJANGO_SUPERUSER_PASSWORD', 'admin123')
+        # Obtener credenciales desde variables de entorno (SIN defaults inseguros)
+        username = os.getenv('DJANGO_SUPERUSER_USERNAME')
+        email = os.getenv('DJANGO_SUPERUSER_EMAIL')
+        password = os.getenv('DJANGO_SUPERUSER_PASSWORD')
         
+        # Validar que todas las variables estén configuradas
+        if not username or not email or not password:
+            self.stdout.write(self.style.ERROR('❌ ERROR DE SEGURIDAD: Credenciales no configuradas'))
+            self.stdout.write(self.style.WARNING(''))
+            self.stdout.write(self.style.WARNING('Debes configurar las siguientes variables de entorno:'))
+            self.stdout.write(self.style.WARNING('  - DJANGO_SUPERUSER_USERNAME'))
+            self.stdout.write(self.style.WARNING('  - DJANGO_SUPERUSER_EMAIL'))
+            self.stdout.write(self.style.WARNING('  - DJANGO_SUPERUSER_PASSWORD'))
+            self.stdout.write(self.style.WARNING(''))
+            self.stdout.write(self.style.WARNING('👉 Ejecuta: python setup_env.py'))
+            self.stdout.write(self.style.WARNING('O crea manualmente el archivo .env con credenciales seguras'))
+            raise CommandError('Configuración de superusuario incompleta')
+        
+        # Validar seguridad de la contraseña
+        if len(password) < 8:
+            self.stdout.write(self.style.ERROR('❌ ERROR: La contraseña debe tener al menos 8 caracteres'))
+            raise CommandError('Contraseña insegura')
+        
+        # Advertencia si se usan credenciales por defecto conocidas
+        if username == 'admin' or password == 'admin123' or password == 'admin':
+            self.stdout.write(self.style.ERROR('❌ ERROR DE SEGURIDAD CRÍTICO'))
+            self.stdout.write(self.style.ERROR('NO puedes usar credenciales por defecto (admin/admin123)'))
+            self.stdout.write(self.style.ERROR('Configura credenciales únicas y seguras en el archivo .env'))
+            raise CommandError('Credenciales inseguras detectadas')
+        
+        # Crear superusuario si no existe
         if not User.objects.filter(username=username).exists():
             User.objects.create_superuser(
                 username=username,

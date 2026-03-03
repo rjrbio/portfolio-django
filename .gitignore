@@ -53,4 +53,8 @@ docker-compose.override.yml
 
 # Other
 render.*
+
+# Ignore markdown files except important ones
 *.md
+!README.md
+!SECURITY.md

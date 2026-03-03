@@ -43,7 +43,7 @@
             {% for project in featured_projects %}
             <div class="card project-card">
                 <h3>{{ project.title }}</h3>
-                <p>{{ project.description|truncatewords:20 }}</p>
+                <p>{{ project.description|truncatewords:100 }}</p>
                 {% if project.github_url or project.url %}
                 <div style="margin-top: 1rem;">
                     {% if project.github_url %}<a href="{{ project.github_url }}" class="btn btn-outline" target="_blank">GitHub</a>{% endif %}
