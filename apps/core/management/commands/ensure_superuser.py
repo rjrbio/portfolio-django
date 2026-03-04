@@ -38,7 +38,24 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('Configura credenciales únicas y seguras en el archivo .env'))
             raise CommandError('Credenciales inseguras detectadas')
         
-        # Crear superusuario si no existe
+        # SEGURIDAD: Eliminar usuarios inseguros conocidos de la base de datos
+        insecure_usernames = ['admin', 'administrator', 'root', 'test', 'demo']
+        for insecure_username in insecure_usernames:
+            try:
+                insecure_user = User.objects.filter(username=insecure_username).first()
+                if insecure_user and insecure_username != username:
+                    # Verificar si el password es el inseguro por defecto
+                    if insecure_user.check_password('admin123') or insecure_user.check_password('admin'):
+                        self.stdout.write(self.style.WARNING(f'🔒 Eliminando usuario inseguro: "{insecure_username}"'))
+                        insecure_user.delete()
+                        self.stdout.write(self.style.SUCCESS(f'✓ Usuario inseguro "{insecure_username}" eliminado'))
+                    else:
+                        # Si tiene otro password, solo advertir
+                        self.stdout.write(self.style.WARNING(f'⚠️  Usuario "{insecure_username}" existe con password diferente'))
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f'⚠️  Error al verificar usuario "{insecure_username}": {e}'))
+        
+        # Crear o verificar superusuario seguro
         if not User.objects.filter(username=username).exists():
             User.objects.create_superuser(
                 username=username,
