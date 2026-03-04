@@ -55,8 +55,9 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stdout.write(self.style.WARNING(f'⚠️  Error al verificar usuario "{insecure_username}": {e}'))
         
-        # Crear o verificar superusuario seguro
-        if not User.objects.filter(username=username).exists():
+        # Crear o reparar superusuario seguro
+        existing_user = User.objects.filter(username=username).first()
+        if not existing_user:
             User.objects.create_superuser(
                 username=username,
                 email=email,
@@ -64,4 +65,29 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS(f'✓ Superusuario "{username}" creado exitosamente'))
         else:
-            self.stdout.write(self.style.WARNING(f'⚠ El superusuario "{username}" ya existe'))
+            updated_fields = []
+
+            if existing_user.email != email:
+                existing_user.email = email
+                updated_fields.append('email')
+
+            if not existing_user.is_staff:
+                existing_user.is_staff = True
+                updated_fields.append('is_staff')
+
+            if not existing_user.is_superuser:
+                existing_user.is_superuser = True
+                updated_fields.append('is_superuser')
+
+            if not existing_user.is_active:
+                existing_user.is_active = True
+                updated_fields.append('is_active')
+
+            existing_user.set_password(password)
+            updated_fields.append('password')
+
+            existing_user.save()
+
+            self.stdout.write(self.style.SUCCESS(
+                f'✓ Superusuario "{username}" actualizado ({", ".join(updated_fields)})'
+            ))
