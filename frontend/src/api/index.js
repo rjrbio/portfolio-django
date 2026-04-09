@@ -2,6 +2,12 @@ const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1'
 const DEFAULT_TIMEOUT_MS = 10_000
 const MAX_RETRIES = 2
 
+function asListResponse(payload) {
+  if (Array.isArray(payload)) return payload
+  if (payload && Array.isArray(payload.results)) return payload.results
+  return []
+}
+
 async function apiFetch(path, options = {}, attempt = 1) {
   // Separamos signal para que no sobrescriba el AbortController interno
   const { signal: _ignored, ...restOptions } = options
@@ -35,14 +41,14 @@ async function apiFetch(path, options = {}, attempt = 1) {
 
 export const api = {
   home: () => apiFetch('/'),
-  projects: () => apiFetch('/projects/'),
+  projects: async () => asListResponse(await apiFetch('/projects/')),
   project: (slug) => apiFetch(`/projects/${slug}/`),
   about: () => apiFetch('/about/'),
   contact: (data) => apiFetch('/contact/', { method: 'POST', body: JSON.stringify(data) }),
   services: () => apiFetch('/services/'),
   testimonials: () => apiFetch('/testimonials/'),
   techs: () => apiFetch('/techs/'),
-  blog: () => apiFetch('/blog/'),
+  blog: async () => asListResponse(await apiFetch('/blog/')),
   post: (slug) => apiFetch(`/blog/${slug}/`),
   resume: () => apiFetch('/resume/'),
   agent: (question) => apiFetch('/agent/', { method: 'POST', body: JSON.stringify({ question }) }),
