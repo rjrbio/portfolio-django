@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +28,11 @@ if env_file.exists():
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+# Entorno de ejecución (development | production)
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development").strip().lower()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-for-development")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 def get_env_list(name, default=""):
     value = os.getenv(name, default)
@@ -36,16 +40,37 @@ def get_env_list(name, default=""):
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+default_debug = "True" if ENVIRONMENT == "development" else "False"
+DEBUG = os.getenv("DEBUG", default_debug).strip().lower() == "true"
 
-DEBUG = os.getenv("DEBUG", "True") == "True"
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = "django-insecure-default-key-for-development"
+    else:
+        raise ImproperlyConfigured("SECRET_KEY es obligatorio cuando DEBUG=False")
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = "Lax"
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 
 ALLOWED_HOSTS = get_env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
+
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 # Logging para ver errores en producción
 LOGGING = {
@@ -85,6 +110,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "corsheaders",
     "apps.core",
     "apps.projects",
     "apps.about",
@@ -94,12 +121,14 @@ INSTALLED_APPS = [
     "apps.techs",
     "apps.blog",
     "apps.resume",
+    "apps.agent",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Para servir archivos estáticos
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -235,3 +264,35 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# OpenAI API
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_AGENT_MODEL = os.getenv("OPENAI_AGENT_MODEL", "gpt-4o")
+OPENAI_TIMEOUT_SECONDS = float(os.getenv("OPENAI_TIMEOUT_SECONDS", "25"))
+
+# Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': os.getenv('DRF_THROTTLE_ANON', '120/hour'),
+        'user': os.getenv('DRF_THROTTLE_USER', '300/hour'),
+        'contact': os.getenv('DRF_THROTTLE_CONTACT', '5/hour'),
+        'agent': os.getenv('DRF_THROTTLE_AGENT', '20/hour'),
+    },
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}
+
+# CORS — en dev Vue corre en :5173
+CORS_ALLOWED_ORIGINS = get_env_list(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173",
+)
+CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", "False").strip().lower() == "true"

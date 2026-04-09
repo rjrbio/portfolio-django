@@ -1,25 +1,19 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import ContactMessage
+from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.throttling import AnonRateThrottle
+from .serializers import ContactMessageSerializer
 
+
+class ContactRateThrottle(AnonRateThrottle):
+    scope = 'contact'
+
+
+@api_view(['POST'])
+@throttle_classes([ContactRateThrottle])
 def contact(request):
-    """Página de contacto"""
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        subject = request.POST.get('subject')
-        message_text = request.POST.get('message')
-        
-        if name and email and subject and message_text:
-            ContactMessage.objects.create(
-                name=name,
-                email=email,
-                subject=subject,
-                message=message_text
-            )
-            messages.success(request, '¡Mensaje enviado correctamente! Te responderé pronto.')
-            return redirect('contact:contact')
-        else:
-            messages.error(request, 'Por favor, completa todos los campos.')
-    
-    return render(request, 'contact/contact.html', {})
+    serializer = ContactMessageSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': '¡Mensaje enviado correctamente!'}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

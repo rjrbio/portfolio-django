@@ -1,17 +1,20 @@
-from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 from .models import Project
+from .serializers import ProjectSerializer
 
+
+@api_view(['GET'])
 def project_list(request):
-    """Lista de proyectos"""
     projects = Project.objects.all()
-    return render(request, 'projects/list.html', {
-        'projects': projects
-    })
+    serializer = ProjectSerializer(projects, many=True, context={'request': request})
+    return Response(serializer.data)
 
+
+@api_view(['GET'])
 def project_detail(request, slug):
-    """Detalle de un proyecto"""
     project = get_object_or_404(Project, slug=slug)
-    return render(request, 'projects/detail.html', {
-        'project': project
-    })
-
+    serializer = ProjectSerializer(project, context={'request': request})
+    return Response(serializer.data)

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if about %}{{ about.name }} - CV{% else %}Currículum Vitae{% endif %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        :root {
+            --primary: #1E293B;
+            --secondary: #334155;
+            --accent: #1E293B;
+            --accent-2: #334155;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --border: #E2E8F0;
+            --bg-light: #F8FAFC;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: white;
+            font-size: 9pt;
+            -webkit-user-select: text !important;
+            user-select: text !important;
+        }
+
+        .cv-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 9mm 14mm;
+            background: white;
+            position: relative;
+        }
+
+        .cv-header {
+            text-align: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .cv-header-content {
+            display: inline-block;
+            width: calc(100% - 136px);
+            vertical-align: top;
+            text-align: center;
+        }
+
+        .profile-picture {
+            display: inline-block;
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            background: var(--bg-light);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            vertical-align: top;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .cv-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24pt;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 2px;
+            letter-spacing: -0.5px;
+        }
+
+        .cv-title {
+            font-size: 11pt;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .cv-contact {
+            display: block;
+            text-align: center;
+            margin-top: 8px;
+            font-size: 8pt;
+            line-height: 1.8;
+        }
+
+        .cv-contact-item {
+            display: inline;
+            color: var(--text-secondary);
+            margin: 0 6px;
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            font-size: 8pt;
+        }
+
+        a {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            cursor: pointer;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .cv-section {
+            margin-bottom: 10px;
+        }
+
+        .cv-section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11pt;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            padding: 0 0 4px;
+            border-bottom: 1.5px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cv-bio {
+            font-size: 9pt;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        .cv-item {
+            margin-bottom: 8px;
+            page-break-inside: avoid;
+            padding: 6px 0;
+        }
+
+        .cv-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+        }
+
+        .cv-item-title {
+            font-size: 9pt;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .cv-item-company {
+            font-size: 9pt;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .cv-item-date {
+            font-size: 8pt;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .cv-item-description {
+            font-size: 8.5pt;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        .cv-projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .cv-project {
+            padding: 8px;
+            background: var(--bg-light);
+            border-left: 3px solid var(--border);
+            page-break-inside: avoid;
+            border-radius: 2px;
+        }
+
+        .cv-project-title {
+            font-size: 9pt;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+
+        .cv-project-description {
+            font-size: 8pt;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+            line-height: 1.3;
+        }
+
+        .cv-project-tech {
+            font-size: 7.5pt;
+            color: var(--secondary);
+            font-style: italic;
+        }
+
+        .cv-tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 5px;
+        }
+
+        .cv-tech-item {
+            text-align: center;
+            padding: 6px;
+            background: var(--bg-light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 8pt;
+            font-weight: 500;
+        }
+
+        .cv-services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .cv-service {
+            padding: 6px;
+            background: var(--bg-light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .cv-service-title {
+            font-size: 9pt;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        .cv-service-description {
+            font-size: 7.5pt;
+            line-height: 1.3;
+            opacity: 1;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 10pt;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            background: var(--secondary);
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                -webkit-user-select: text !important;
+                user-select: text !important;
+            }
+
+            .cv-container {
+                max-width: 100%;
+                padding: 0.3in 0.45in;
+                margin: 0;
+            }
+
+            .cv-header {
+                position: relative;
+                text-align: center;
+                padding-right: 150px;
+                min-height: 140px;
+            }
+
+            .cv-header-content {
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding-right: 0;
+            }
+
+            .profile-picture-cell {
+                display: block;
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 140px;
+                text-align: right;
+            }
+
+            .profile-picture {
+                width: 132px !important;
+                height: 132px !important;
+                display: block;
+                margin: 0 0 0 auto;
+                border-width: 5px !important;
+            }
+
+            .cv-name {
+                font-size: 20pt;
+            }
+
+            .cv-title {
+                font-size: 10pt;
+                margin-bottom: 6px;
+            }
+
+            .cv-contact {
+                font-size: 7.6pt;
+                line-height: 1.6;
+            }
+
+            .cv-contact-item {
+                margin: 0 4px;
+            }
+
+            .cv-section {
+                margin-bottom: 8px;
+            }
+
+            .cv-item {
+                margin-bottom: 6px;
+                padding: 4px 0;
+            }
+
+            .cv-section {
+                page-break-inside: avoid;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            a {
+                color: var(--primary) !important;
+                -webkit-user-select: text !important;
+                user-select: text !important;
+                cursor: pointer !important;
+            }
+
+            * {
+                -webkit-user-select: text !important;
+                user-select: text !important;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cv-projects-grid,
+            .cv-services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cv-header {
+                text-align: center;
+            }
+
+            .cv-header-content {
+                display: block;
+                width: 100%;
+                margin-bottom: 12px;
+            }
+
+            .profile-picture {
+                display: block;
+                width: 70px;
+                height: 70px;
+                margin: 0 auto;
+                margin-left: 0;
+            }
+
+            .cv-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Print Button -->
+    <button class="print-button no-print" onclick="window.print()">
+        🖨️ Guardar como PDF
+    </button>
+
+    <div class="cv-container">
+        {% if about %}
+        <!-- Header -->
+        <header class="cv-header">
+            <div class="cv-header-content">
+                <h1 class="cv-name">{{ about.name }}</h1>
+                <p class="cv-title">{{ about.title }}</p>
+                
+                <div class="cv-contact">
+                    {% if about.email %}
+                    <a href="mailto:{{ about.email }}" class="cv-contact-item">✉️ Email</a>
+                    {% endif %}
+                    {% if about.phone %}
+                    <span class="cv-contact-item">📱 {{ about.phone }}</span>
+                    {% endif %}
+                    <span class="cv-contact-item">📍 Málaga, España</span>
+                    <a href="https://jdev.alwaysdata.net/" class="cv-contact-item" target="_blank">🌐 Portfolio</a>
+                    {% if about.linkedin %}
+                    <a href="{{ about.linkedin }}" class="cv-contact-item" target="_blank">💼 LinkedIn</a>
+                    {% endif %}
+                    {% if about.github %}
+                    <a href="{{ about.github }}" class="cv-contact-item" target="_blank">💻 GitHub</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Profile Picture -->
+            {% if about.profile_image %}
+            <div class="profile-picture-cell">
+                <img src="{{ about.profile_image.url }}" alt="{{ about.name }}" class="profile-picture">
+            </div>
+            {% endif %}
+        </header>
+
+        <!-- Professional Summary -->
+        {% if about.bio %}
+        <section class="cv-section">
+            <h2 class="cv-section-title">Sobre Mí</h2>
+            <p class="cv-bio">{{ about.bio }}</p>
+        </section>
+        {% endif %}
+        {% endif %}
+
+        <!-- Experience -->
+        {% if experience %}
+        <section class="cv-section">
+            <h2 class="cv-section-title">Experiencia</h2>
+            {% for exp in experience %}
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <div>
+                        <div class="cv-item-title">{{ exp.position }}</div>
+                        <div class="cv-item-company">@ {{ exp.company }}</div>
+                    </div>
+                    <div class="cv-item-date">
+                        {{ exp.start_date|date:'M Y' }} - {% if exp.current %}Presente{% else %}{{ exp.end_date|date:'M Y' }}{% endif %}
+                    </div>
+                </div>
+                <p class="cv-item-description">{{ exp.description }}</p>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Education -->
+        {% if education %}
+        <section class="cv-section">
+            <h2 class="cv-section-title">Educación</h2>
+            {% for edu in education %}
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <div>
+                        <div class="cv-item-title">{{ edu.degree }}</div>
+                        <div class="cv-item-company">{{ edu.institution }}</div>
+                    </div>
+                    <div class="cv-item-date">
+                        {{ edu.start_date|date:'Y' }} - {% if edu.current %}Presente{% else %}{{ edu.end_date|date:'Y' }}{% endif %}
+                    </div>
+                </div>
+                {% if edu.description %}
+                <p class="cv-item-description">{{ edu.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Featured Projects -->
+        {% if projects %}
+        <section class="cv-section">
+            <h2 class="cv-section-title">Proyecto Destacado</h2>
+            <div class="cv-projects-grid">
+                {% for project in projects %}
+                <div class="cv-project">
+                    <div class="cv-project-title">{{ project.title }}</div>
+                    <p class="cv-project-description">{{ project.description }}</p>
+                    {% if project.technologies %}
+                    <div class="cv-project-tech">{{ project.technologies }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Technologies -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">Stack Tecnológico</h2>
+            
+            <div style="margin-bottom: 8px;">
+                <div style="font-size: 9pt; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Lenguajes principales</div>
+                <div style="font-size: 8.5pt; color: var(--text-secondary);">Java · PHP · JavaScript · SQL</div>
+            </div>
+            
+            <div style="margin-bottom: 8px;">
+                <div style="font-size: 9pt; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Frameworks</div>
+                <div style="font-size: 8.5pt; color: var(--text-secondary);">Django · Angular</div>
+            </div>
+            
+            <div style="margin-bottom: 8px;">
+                <div style="font-size: 9pt; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Bases de datos</div>
+                <div style="font-size: 8.5pt; color: var(--text-secondary);">MySQL · PostgreSQL · MongoDB</div>
+            </div>
+            
+            <div style="margin-bottom: 4px;">
+                <div style="font-size: 9pt; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Herramientas</div>
+                <div style="font-size: 8.5pt; color: var(--text-secondary);">Git · Docker · Linux · Nginx</div>
+            </div>
+        </section>
+
+        <!-- Services/Specializations -->
+        {% if services %}
+        <section class="cv-section">
+            <h2 class="cv-section-title">Especialidades</h2>
+            <div class="cv-services-grid">
+                {% for service in services %}
+                <div class="cv-service">
+                    <div class="cv-service-title">{{ service.title }}</div>
+                    <p class="cv-service-description">{{ service.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <script>
+        // Facilitar la impresión con atajos de teclado
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+        });
+    </script>
+</body>
+</html>

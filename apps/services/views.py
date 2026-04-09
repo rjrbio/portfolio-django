@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .models import Service
+from .serializers import ServiceSerializer
 
+
+@api_view(['GET'])
 def service_list(request):
-    """Lista de servicios"""
     services = Service.objects.all()
-    return render(request, 'services/list.html', {
-        'services': services
-    })
+    serializer = ServiceSerializer(services, many=True, context={'request': request})
+    return Response(serializer.data)

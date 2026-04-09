@@ -1,0 +1,304 @@
+/* ── Design Tokens ─────────────────────────────────────── */
+:root {
+  /* Palette */
+  --c-white: #ffffff;
+  --c-gray-50: #f9fafb;
+  --c-gray-100: #f3f4f6;
+  --c-gray-200: #e5e7eb;
+  --c-gray-300: #d1d5db;
+  --c-gray-400: #9ca3af;
+  --c-gray-500: #6b7280;
+  --c-gray-600: #4b5563;
+  --c-gray-700: #374151;
+  --c-gray-800: #1f2937;
+  --c-gray-900: #111827;
+  --c-accent: #2563eb;
+  --c-accent-light: #3b82f6;
+  --c-accent-dark: #1d4ed8;
+  --c-accent-bg: #eff6ff;
+
+  /* Semantic */
+  --color-bg: var(--c-white);
+  --color-bg-alt: var(--c-gray-50);
+  --color-text: var(--c-gray-800);
+  --color-text-muted: var(--c-gray-500);
+  --color-heading: var(--c-gray-900);
+  --color-border: var(--c-gray-200);
+  --color-accent: var(--c-accent);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --font-mono: 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+
+  /* Spacing */
+  --section-py: 5rem;
+  --container-px: 1.25rem;
+  --container-max: 1120px;
+
+  /* Misc */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --nav-height: 4rem;
+}
+
+/* ── Reset ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-padding-top: var(--nav-height);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-heading);
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* ── Utility Classes ───────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--container-px);
+  padding-right: var(--container-px);
+}
+
+.section {
+  padding-top: var(--section-py);
+  padding-bottom: var(--section-py);
+}
+
+.section-alt {
+  background: var(--color-bg-alt);
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 3rem;
+}
+
+/* ── Fade-in on scroll (legacy, for non-landing pages) ── */
+.fade-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Fullscreen Slideshow System ───────────────────────── */
+body:has(.slideshow) {
+  overflow: hidden;
+}
+
+.slideshow {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--nav-height));
+  margin-top: var(--nav-height);
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+/* Each slide is stacked, fills the viewport, hidden by default */
+.slide {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
+  background: var(--color-bg);
+  z-index: 0;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Leaving slide fades out behind the entering one */
+.slide.leaving {
+  opacity: 0;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* ── Hero entrance — long, staggered ──────────────────── */
+.hero-anim .hero-greeting,
+.hero-anim .hero-name,
+.hero-anim .hero-title,
+.hero-anim .hero-bio,
+.hero-anim .hero-actions,
+.hero-anim .hero-socials,
+.hero-anim .hero-image {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.hero-anim.animate .hero-greeting { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+.hero-anim.animate .hero-name    { opacity: 1; transform: translateY(0); transition-delay: 0.6s; }
+.hero-anim.animate .hero-title   { opacity: 1; transform: translateY(0); transition-delay: 0.9s; }
+.hero-anim.animate .hero-bio     { opacity: 1; transform: translateY(0); transition-delay: 1.2s; }
+.hero-anim.animate .hero-actions { opacity: 1; transform: translateY(0); transition-delay: 1.5s; }
+.hero-anim.animate .hero-socials { opacity: 1; transform: translateY(0); transition-delay: 1.8s; }
+.hero-anim.animate .hero-image   { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.5s; transition-duration: 1.2s; }
+
+/* ── Content entrance within slides ───────────────────── */
+.slide-content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.slide.active .slide-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .slide-stagger-1 { transition-delay: 0.15s; }
+.slide.active .slide-stagger-2 { transition-delay: 0.3s; }
+.slide.active .slide-stagger-3 { transition-delay: 0.45s; }
+
+/* ── Tech icon stagger animation ──────────────────────── */
+.tech-icon-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.tech-icon-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Slide navigation dots ────────────────────────────── */
+.slide-dots {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.slide-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--c-gray-400);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.slide-dot:hover {
+  border-color: var(--color-accent);
+  transform: scale(1.3);
+}
+
+.slide-dot.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .slide-dots {
+    right: 0.75rem;
+    gap: 0.5rem;
+  }
+  .slide-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* ── Page entrance animation (standalone routes) ──────── */
+.page-enter {
+  opacity: 0;
+  min-height: calc(100vh - var(--nav-height));
+  display: flex;
+  flex-direction: column;
+}
+.page-enter.ready .page-anim {
+  opacity: 1;
+  transform: translateY(0);
+}
+.page-anim {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.page-stagger-1 { transition-delay: 0.1s; }
+.page-stagger-2 { transition-delay: 0.25s; }
+.page-stagger-3 { transition-delay: 0.4s; }
+.page-stagger-4 { transition-delay: 0.55s; }
+.page-stagger-5 { transition-delay: 0.7s; }
+.page-enter.ready {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.page-enter > :last-child {
+  margin-top: auto;
+}
