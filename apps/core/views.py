@@ -13,9 +13,14 @@ from apps.blog.serializers import PostListSerializer
 @api_view(['GET'])
 def home(request):
     ctx = {'request': request}
+    featured_qs = Project.objects.filter(featured=True).order_by('-created_at')
+    if not featured_qs.exists():
+        # Fallback para evitar home vacía si no hay proyectos marcados como destacados.
+        featured_qs = Project.objects.all().order_by('-created_at')
+
     data = {
         'featured_projects': ProjectSerializer(
-            Project.objects.filter(featured=True).order_by('-created_at')[:3],
+            featured_qs[:3],
             many=True, context=ctx
         ).data,
         'services': ServiceSerializer(
