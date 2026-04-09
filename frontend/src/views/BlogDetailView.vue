@@ -37,7 +37,7 @@ onMounted(async () => {
         <time v-if="post.created_at">{{ new Date(post.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) }}</time>
         <h1>{{ post.title }}</h1>
         <p class="detail-excerpt">{{ post.excerpt }}</p>
-        <img v-if="post.image" :src="post.image" :alt="post.title" class="detail-hero-img" />
+        <img v-if="post.image" :src="post.image" :alt="post.title" class="detail-hero-img" loading="eager" />
         <div class="detail-body" v-html="post.content"></div>
       </article>
     </div>

@@ -7,8 +7,8 @@ class Post(models.Model):
     excerpt = models.TextField(max_length=300, verbose_name="Extracto")
     content = models.TextField(verbose_name="Contenido")
     image = models.ImageField(upload_to='blog/', verbose_name="Imagen destacada", blank=True, null=True)
-    published = models.BooleanField(default=True, verbose_name="Publicado")
-    created_at = models.DateTimeField(auto_now_add=True)
+    published = models.BooleanField(default=True, verbose_name="Publicado", db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:

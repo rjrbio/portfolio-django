@@ -9,8 +9,8 @@ class Project(models.Model):
     url = models.URLField(blank=True, null=True, verbose_name="URL del proyecto")
     github_url = models.URLField(blank=True, null=True, verbose_name="URL de GitHub")
     technologies = models.CharField(max_length=500, verbose_name="Tecnologías usadas", help_text="Separadas por comas")
-    featured = models.BooleanField(default=False, verbose_name="Destacado")
-    created_at = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False, verbose_name="Destacado", db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:

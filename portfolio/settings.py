@@ -16,6 +16,9 @@ import dj_database_url
 from dotenv import load_dotenv
 from django.core.exceptions import ImproperlyConfigured
 
+# Entorno de ejecución: development (por defecto) o production
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development").strip().lower()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,11 +31,14 @@ if env_file.exists():
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# Entorno de ejecución (development | production)
-ENVIRONMENT = os.getenv("DJANGO_ENV", "development").strip().lower()
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+_secret_key_raw = os.getenv("SECRET_KEY")
+if not _secret_key_raw:
+    if ENVIRONMENT == "development":
+        _secret_key_raw = "django-insecure-default-key-for-development"
+    else:
+        raise ImproperlyConfigured("SECRET_KEY es obligatoria cuando DJANGO_ENV=production")
+SECRET_KEY = _secret_key_raw
 
 def get_env_list(name, default=""):
     value = os.getenv(name, default)
@@ -40,15 +46,10 @@ def get_env_list(name, default=""):
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-default_debug = "True" if ENVIRONMENT == "development" else "False"
-DEBUG = os.getenv("DEBUG", default_debug).strip().lower() == "true"
+_default_debug = "True" if ENVIRONMENT == "development" else "False"
+DEBUG = os.getenv("DEBUG", _default_debug).strip().lower() == "true"
 
-if not SECRET_KEY:
-    if DEBUG:
-        SECRET_KEY = "django-insecure-default-key-for-development"
-    else:
-        raise ImproperlyConfigured("SECRET_KEY es obligatorio cuando DEBUG=False")
-
+# Cabeceras y cookies de seguridad (aplican en todos los entornos)
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"

@@ -24,12 +24,20 @@ RUN pip install --upgrade pip && \
 # Copiar el resto del proyecto (incluyendo media/)
 COPY . /app/
 
-# Crear directorios necesarios y dar permisos
+# Crear usuario no-root para ejecutar la aplicación
+RUN groupadd --gid 1001 appgroup && \
+    useradd --uid 1001 --gid appgroup --no-create-home appuser
+
+# Crear directorios necesarios y asignar propiedad al usuario no-root
 RUN mkdir -p staticfiles media && \
+    chown -R appuser:appgroup /app && \
     chmod -R 755 media staticfiles
 
 # Dar permisos de ejecución al entrypoint
 RUN chmod +x docker-entrypoint.sh
+
+# Cambiar al usuario no-root
+USER appuser
 
 # Exponer el puerto
 EXPOSE 8000

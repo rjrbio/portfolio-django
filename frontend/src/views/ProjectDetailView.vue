@@ -38,7 +38,7 @@ onMounted(async () => {
         <div class="detail-tags">
           <span class="badge" v-for="tech in project.technologies" :key="tech">{{ tech }}</span>
         </div>
-        <img v-if="project.image" :src="project.image" :alt="project.title" class="detail-hero-img" />
+        <img v-if="project.image" :src="project.image" :alt="project.title" class="detail-hero-img" loading="eager" />
         <div class="detail-body">
           <p>{{ project.description }}</p>
         </div>

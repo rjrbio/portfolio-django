@@ -17,7 +17,7 @@ defineProps({
           class="card project-card"
         >
           <div class="project-img" v-if="project.image">
-            <img :src="project.image" :alt="project.title" />
+            <img :src="project.image" :alt="project.title" loading="lazy" />
           </div>
           <div class="project-img project-img--placeholder" v-else>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 9 6 6M15 9l-6 6"/></svg>

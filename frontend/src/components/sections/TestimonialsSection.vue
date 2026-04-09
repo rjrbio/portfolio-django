@@ -14,7 +14,7 @@ defineProps({
           <div class="quote-mark">"</div>
           <p class="testimonial-text">{{ t.content }}</p>
           <div class="testimonial-footer">
-            <img v-if="t.avatar" :src="t.avatar" :alt="t.name" class="testimonial-avatar" />
+            <img v-if="t.avatar" :src="t.avatar" :alt="t.name" class="testimonial-avatar" loading="lazy" />
             <div class="testimonial-avatar testimonial-avatar--placeholder" v-else>
               {{ t.name.charAt(0) }}
             </div>

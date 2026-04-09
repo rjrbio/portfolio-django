@@ -34,7 +34,7 @@ function goContact() {
         </div>
       </div>
       <div class="hero-image" v-if="about?.profile_image">
-        <img :src="about.profile_image" :alt="about.name" />
+        <img :src="about.profile_image" :alt="about.name" loading="eager" />
       </div>
     </div>
   </section>

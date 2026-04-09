@@ -15,7 +15,8 @@ def home(request):
     ctx = {'request': request}
     data = {
         'featured_projects': ProjectSerializer(
-            Project.objects.filter(featured=True)[:3], many=True, context=ctx
+            Project.objects.filter(featured=True).order_by('-created_at')[:3],
+            many=True, context=ctx
         ).data,
         'services': ServiceSerializer(
             Service.objects.all()[:4], many=True, context=ctx
@@ -24,7 +25,8 @@ def home(request):
             Testimonial.objects.all()[:3], many=True, context=ctx
         ).data,
         'recent_posts': PostListSerializer(
-            Post.objects.filter(published=True)[:3], many=True, context=ctx
+            Post.objects.filter(published=True).order_by('-created_at')[:3],
+            many=True, context=ctx
         ).data,
     }
     return Response(data)

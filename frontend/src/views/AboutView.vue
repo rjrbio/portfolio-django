@@ -43,7 +43,7 @@ onMounted(async () => {
 
                         <div class="about-layout">
                             <div class="about-photo page-anim page-stagger-2" v-if="about.profile_image">
-                                <img :src="about.profile_image" :alt="about.name" />
+                                <img :src="about.profile_image" :alt="about.name" loading="eager" />
                             </div>
                             <div class="about-content page-anim page-stagger-3">
                                 <p class="about-bio">{{ about.bio }}</p>

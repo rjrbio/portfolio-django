@@ -18,7 +18,7 @@ defineProps({
           class="card blog-card"
         >
           <div class="blog-img" v-if="post.image">
-            <img :src="post.image" :alt="post.title" />
+            <img :src="post.image" :alt="post.title" loading="lazy" />
           </div>
           <div class="blog-body">
             <time v-if="post.created_at">{{ new Date(post.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) }}</time>
