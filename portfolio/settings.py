@@ -40,14 +40,31 @@ if not _secret_key_raw:
         raise ImproperlyConfigured("SECRET_KEY es obligatoria cuando DJANGO_ENV=production")
 SECRET_KEY = _secret_key_raw
 
+def _clean_env_value(value):
+    if value is None:
+        return None
+    # Permite valores tipo: require # comentario
+    cleaned = value.split("#", 1)[0].strip()
+    if (cleaned.startswith('"') and cleaned.endswith('"')) or (cleaned.startswith("'") and cleaned.endswith("'")):
+        cleaned = cleaned[1:-1].strip()
+    return cleaned
+
+
+def get_env(name, default=None):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return _clean_env_value(value)
+
+
 def get_env_list(name, default=""):
-    value = os.getenv(name, default)
+    value = get_env(name, default)
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 _default_debug = "True" if ENVIRONMENT == "development" else "False"
-DEBUG = os.getenv("DEBUG", _default_debug).strip().lower() == "true"
+DEBUG = (get_env("DEBUG", _default_debug) or "").strip().lower() == "true"
 
 # Cabeceras y cookies de seguridad (aplican en todos los entornos)
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -159,20 +176,20 @@ WSGI_APPLICATION = "portfolio.wsgi.application"
 
 
 # Database - Usar DATABASE_URL o variables individuales (AlwaysData/hosting)
-if os.getenv("DATABASE_URL"):
+if get_env("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.config(
-            default=os.getenv("DATABASE_URL"),
+            default=get_env("DATABASE_URL"),
             conn_max_age=600,
         )
     }
 else:
-    db_name = os.getenv("DB_NAME") or os.getenv("POSTGRES_DB") or os.getenv("PGDATABASE")
-    db_user = os.getenv("DB_USER") or os.getenv("POSTGRES_USER") or os.getenv("PGUSER")
-    db_password = os.getenv("DB_PASSWORD") or os.getenv("POSTGRES_PASSWORD") or os.getenv("PGPASSWORD")
-    db_host = os.getenv("DB_HOST") or os.getenv("POSTGRES_HOST") or os.getenv("PGHOST")
-    db_port = os.getenv("DB_PORT") or os.getenv("POSTGRES_PORT") or os.getenv("PGPORT")
-    db_sslmode = os.getenv("DB_SSLMODE")
+    db_name = get_env("DB_NAME") or get_env("POSTGRES_DB") or get_env("PGDATABASE")
+    db_user = get_env("DB_USER") or get_env("POSTGRES_USER") or get_env("PGUSER")
+    db_password = get_env("DB_PASSWORD") or get_env("POSTGRES_PASSWORD") or get_env("PGPASSWORD")
+    db_host = get_env("DB_HOST") or get_env("POSTGRES_HOST") or get_env("PGHOST")
+    db_port = get_env("DB_PORT") or get_env("POSTGRES_PORT") or get_env("PGPORT")
+    db_sslmode = get_env("DB_SSLMODE")
 
     if all([db_name, db_user, db_password, db_host, db_port]):
         DATABASES = {
@@ -296,4 +313,4 @@ CORS_ALLOWED_ORIGINS = get_env_list(
     "http://localhost:5173,http://127.0.0.1:5173",
 )
 CORS_URLS_REGEX = r'^/api/.*$'
-CORS_ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", "False").strip().lower() == "true"
+CORS_ALLOW_CREDENTIALS = (get_env("CORS_ALLOW_CREDENTIALS", "False") or "").strip().lower() == "true"
